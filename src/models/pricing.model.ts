@@ -2,10 +2,8 @@ import mongoose from "mongoose";
 import { ShipmentEnum } from "../common";
 
 const PricingSchema = new mongoose.Schema({
-  type: { type: String, required: true, enum: ShipmentEnum },
+  type: { type: String, required: true, enum: Object.values(ShipmentEnum) },
   price: { type: Number, required: true },
 });
 
-const Pricing = mongoose.model("Pricing", PricingSchema);
-
-export default Pricing;
+export const Pricing = mongoose.model("Pricing", PricingSchema);

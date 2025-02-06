@@ -15,13 +15,13 @@ export const getPricingByType = async (
 ): Promise<any> => {
   try {
     const validatedParams = getPricingByTypeValidation.parse(req.params);
-    const pricing = await Pricing.findById(validatedParams.type);
+    const pricing = await Pricing.findOne({ type: validatedParams.type });
 
     if (!pricing) {
       return res.status(404).json({ message: "Pricing not found" });
     }
 
-    res.status(200).json(pricing);
+    return res.status(200).json(pricing);
   } catch (error: any) {
     if (error instanceof ZodError) {
       const errors = handleZodError(error);
@@ -30,7 +30,7 @@ export const getPricingByType = async (
         errors,
       });
     }
-    res
+    return res
       .status(500)
       .json({ message: "Error fetching pricing", error: error.message });
   }
@@ -44,13 +44,15 @@ export const addPricing = async (req: Request, res: Response): Promise<any> => {
     // check if pricing already exists
     const pricingExists = await Pricing.findOne({ type: validatedData.type });
     if (pricingExists) {
-      res.status(400).json({ message: "Pricing already exists for this type" });
+      return res
+        .status(400)
+        .json({ message: "Pricing already exists for this type" });
     }
 
     const newPricing = new Pricing(validatedData);
     await newPricing.save();
 
-    res
+    return res
       .status(201)
       .json({ message: "Pricing added successfully", data: newPricing });
   } catch (error: any) {
@@ -61,7 +63,7 @@ export const addPricing = async (req: Request, res: Response): Promise<any> => {
         errors,
       });
     }
-    res
+    return res
       .status(500)
       .json({ message: "Error adding pricing", error: error.message });
   }
@@ -74,9 +76,9 @@ export const getAllPricing = async (
 ): Promise<any> => {
   try {
     const pricing = await Pricing.find();
-    res.status(200).json(pricing);
+    return res.status(200).json(pricing);
   } catch (error: any) {
-    res
+    return res
       .status(500)
       .json({ message: "Error fetching pricing", error: error.message });
   }
@@ -104,7 +106,7 @@ export const getPricingById = async (
         errors,
       });
     }
-    res
+    return res
       .status(500)
       .json({ message: "Error fetching pricing", error: error.message });
   }
@@ -129,7 +131,7 @@ export const updatePricing = async (
       return res.status(404).json({ message: "Pricing not found" });
     }
 
-    res
+    return res
       .status(200)
       .json({ message: "Pricing updated successfully", data: updatedPricing });
   } catch (error: any) {
@@ -140,7 +142,7 @@ export const updatePricing = async (
         errors,
       });
     }
-    res
+    return res
       .status(500)
       .json({ message: "Error updating pricing", error: error.message });
   }
@@ -160,7 +162,7 @@ export const deletePricing = async (
       return res.status(404).json({ message: "Pricing not found" });
     }
 
-    res.status(200).json({ message: "Pricing deleted successfully" });
+    return res.status(200).json({ message: "Pricing deleted successfully" });
   } catch (error: any) {
     if (error instanceof ZodError) {
       const errors = handleZodError(error);
@@ -169,7 +171,7 @@ export const deletePricing = async (
         errors,
       });
     }
-    res
+    return res
       .status(500)
       .json({ message: "Error deleting pricing", error: error.message });
   }

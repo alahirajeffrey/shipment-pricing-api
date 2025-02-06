@@ -16,8 +16,8 @@ export const calculateShippingCost = async (
 
     const cost = pricing.price * weight * distance;
 
-    res.status(200).json({ cost: cost });
-  } catch (error) {
+    return res.status(200).json({ cost: cost });
+  } catch (error: any) {
     if (error instanceof ZodError) {
       const errors = handleZodError(error);
       return res.status(400).json({
@@ -25,5 +25,8 @@ export const calculateShippingCost = async (
         errors,
       });
     }
+    return res
+      .status(500)
+      .json({ message: "Error occured", error: error.message });
   }
 };

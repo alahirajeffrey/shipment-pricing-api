@@ -6,27 +6,32 @@ Content-Type: application/json
 
 {
   "type": "fragile",
-  "price": 1.5
+  "price": 1.0
 }
 
 ### get all pricing
 GET {{shipment_api_host_address}}/pricing
 Accept: application/json
 
-### get Single Pricing Rule by ID
-GET {{shipment_api_host_address}}/pricing
+### get single pricing by id
+GET {{shipment_api_host_address}}/pricing/67a47e7220effd1cb99be34a
 Accept: application/json
 
+### get single pricing by type
+GET {{shipment_api_host_address}}/pricing/type/fragile
+Accept: application/json
+
+
 ### update pricing
-PUT {{shipment_api_host_address}}/pricing
+PATCH {{shipment_api_host_address}}/pricing/67a47e7220effd1cb99be34a
 Content-Type: application/json
 
 {
-  "price": 0.6
+  "price": 5.0
 }
 
 ### delete pricing
-DELETE {{shipment_api_host_address}}/pricing
+DELETE {{shipment_api_host_address}}/pricing/67a47e6d20effd1cb99be347
 Accept: application/json
 
 ### calculate shipping cost

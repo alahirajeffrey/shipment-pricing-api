@@ -2,15 +2,50 @@ import { Request, Response } from "express";
 import { Pricing } from "../models";
 import {
   addPricingValidation,
+  getPricingByTypeValidation,
   getPricingValidation,
   handleZodError,
 } from "../common";
 import { ZodError } from "zod";
 
+// get pricing by type
+export const getPricingByType = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
+  try {
+    const validatedParams = getPricingByTypeValidation.parse(req.params);
+    const pricing = await Pricing.findById(validatedParams.type);
+
+    if (!pricing) {
+      return res.status(404).json({ message: "Pricing not found" });
+    }
+
+    res.status(200).json(pricing);
+  } catch (error: any) {
+    if (error instanceof ZodError) {
+      const errors = handleZodError(error);
+      return res.status(400).json({
+        message: "Validation failed",
+        errors,
+      });
+    }
+    res
+      .status(500)
+      .json({ message: "Error fetching pricing", error: error.message });
+  }
+};
+
 // add pricing controller
 export const addPricing = async (req: Request, res: Response): Promise<any> => {
   try {
     const validatedData = addPricingValidation.parse(req.body);
+
+    // check if pricing already exists
+    const pricingExists = await Pricing.findOne({ type: validatedData.type });
+    if (pricingExists) {
+      res.status(400).json({ message: "Pricing already exists for this type" });
+    }
 
     const newPricing = new Pricing(validatedData);
     await newPricing.save();
@@ -38,7 +73,6 @@ export const getAllPricing = async (
   res: Response
 ): Promise<any> => {
   try {
-    console.log("here");
     const pricing = await Pricing.find();
     res.status(200).json(pricing);
   } catch (error: any) {

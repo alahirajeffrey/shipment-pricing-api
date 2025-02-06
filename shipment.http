@@ -1,5 +1,14 @@
 @shipment_api_host_address = http://localhost:3001
 
+## create pricing 
+POST {{shipment_api_host_address}}/pricing
+Content-Type: application/json
+
+{
+  "type": "fragile",
+  "price": 1.5
+}
+
 ### get all pricing
 GET {{shipment_api_host_address}}/pricing
 Accept: application/json
@@ -7,14 +16,6 @@ Accept: application/json
 ### get Single Pricing Rule by ID
 GET {{shipment_api_host_address}}/pricing
 Accept: application/json
-
-POST {{shipment_api_host_address}}/pricing
-Content-Type: application/json
-
-{
-  "type": "fragile",
-  "price": 0.5
-}
 
 ### update pricing
 PUT {{shipment_api_host_address}}/pricing

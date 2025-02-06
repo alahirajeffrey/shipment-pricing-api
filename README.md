@@ -12,5 +12,5 @@
 
 **NB**: the mongodb commection string would be `mongodb://localhost:27017/tinkteq`.
 
-- To run the application in dev mode, run the command `npm run dev` other run `npm run start`.
+- To run the application in dev mode, run the command `npm run dev` or run `npm run start`.
 - Use the shipment.http file to test the endpoints. Update pring IDs appropraitely

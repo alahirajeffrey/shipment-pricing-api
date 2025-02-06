@@ -1,0 +1,39 @@
+@shipment_api_host_address = http://localhost:3001
+
+### get all pricing
+GET {{shipment_api_host_address}}/pricing
+Accept: application/json
+
+### get Single Pricing Rule by ID
+GET {{shipment_api_host_address}}/pricing
+Accept: application/json
+
+POST {{shipment_api_host_address}}/pricing
+Content-Type: application/json
+
+{
+  "type": "fragile",
+  "price": 0.5
+}
+
+### update pricing
+PUT {{shipment_api_host_address}}/pricing
+Content-Type: application/json
+
+{
+  "price": 0.6
+}
+
+### delete pricing
+DELETE {{shipment_api_host_address}}/pricing
+Accept: application/json
+
+### calculate shipping cost
+POST {{shipment_api_host_address}}/shipment/calculate
+Content-Type: application/json
+
+{
+  "weight": 10,
+  "distance": 100,
+  "type": "fragile"
+}
